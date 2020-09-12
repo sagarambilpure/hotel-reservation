@@ -1,0 +1,125 @@
+{% include 'ext_includes/header.html' %}
+{% load static %}
+</head>
+
+<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
+
+    {% include 'ext_includes/nav.html' %}
+    <!-- Container (About Section) -->
+    <div id="about" class="container-fluid">
+        <div class="">
+            <p style="color: black;">
+            <h2>Enter check in and check out day</h2>
+            </p>
+        </div>
+        <div>
+            <form action="{% url 'search' %}" method="post">
+                {% csrf_token %}
+                <div class="form-row">
+                    <h6>Check in date</h6>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label for="from_date">Date</label>
+                            <input type="date" id="from_datepicker" name="from_date" placeholder="DD/MM/YYYY" required>
+                            <div id="from_datewarn"></div>
+                        </div>
+                    </div>
+                    <h6>Check out date</h6>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label for="to_date">Date</label>
+                            <input type="date" id="to_datepicker" name="to_date" placeholder="DD/MM/YYYY" required>
+                            <div id="to_datewarn"></div>
+                        </div>
+                    </div>
+
+                    <button id="search_btn" class="btn btn-primary" type="submit">Search</a>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-12">
+
+            {% if  a_rooms|length > 0 %}
+            <div style="overflow-y:auto;">
+                <div>{{a_rooms|length }} rooms are available from {{from}} to {{to}}:</div>
+                <table id="table" style="font-size:15px;" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <td>Room id</td>
+                            <td>Room Type</td>
+                            <td>Room Capacity</td>
+                        </tr>
+                    </thead>
+                    <tbody id="" name="">
+
+                        {% for room in a_rooms %}
+                        <tr>
+                            <td>{{ room.room_id }}</td>
+                            <td>{{ room.room_type }}</td>
+                            <td>{{ room.room_capacity }}</td>
+
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="6">ALL BOOKED DURING THAT PERIOD</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+            </div>
+            {% endif %}
+            <div>
+                <a class="btn btn-primary" href="{% url 'book' %}">Book a room</a>
+            </div>
+        </div>
+    </div>
+
+    {% comment %} <footer class="container-fluid text-center">
+        <a href="#myPage" title="To Top">
+            <span class="glyphicon glyphicon-chevron-up"></span>
+        </a>
+        <!-- <p>Bootstrap Theme Made By <a href="https://www.w3schools.com" title="Visit w3schools">www.w3schools.com</a></p> -->
+    </footer> {% endcomment %}
+
+    <script>
+        $(document).ready(function () {
+            // Add smooth scrolling to all links in navbar + footer link
+            $(".navbar a, footer a[href='#myPage']").on('click', function (event) {
+                // Make sure this.hash has a value before overriding default behavior
+                if (this.hash !== "") {
+                    // Prevent default anchor click behavior
+                    event.preventDefault();
+
+                    // Store hash
+                    var hash = this.hash;
+
+                    // Using jQuery's animate() method to add smooth page scroll
+                    // The optional number (900) specifies the number of milliseconds it takes to scroll to the specified area
+                    $('html, body').animate({
+                        scrollTop: $(hash).offset().top
+                    }, 900, function () {
+
+                        // Add hash (#) to URL when done scrolling (default click behavior)
+                        window.location.hash = hash;
+                    });
+                } // End if
+            });
+
+            $(window).scroll(function () {
+                $(".slideanim").each(function () {
+                    var pos = $(this).offset().top;
+
+                    var winTop = $(window).scrollTop();
+                    if (pos < winTop + 600) {
+                        $(this).addClass("slide");
+                    }
+                });
+            });
+        })
+    </script>
+
+</body>
+
+</html>
